@@ -1,19 +1,19 @@
 import eslintConfigPrettier from "eslint-config-prettier";
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import eslintPluginUnicorn from 'eslint-plugin-unicorn';
-import perfectionist from 'eslint-plugin-perfectionist';
-import perfectionistNatural from 'eslint-plugin-perfectionist/configs/recommended-natural'
+import eslint from "@eslint/js";
+import tseslint from "typescript-eslint";
+import eslintPluginUnicorn from "eslint-plugin-unicorn";
+// import perfectionist from 'eslint-plugin-perfectionist';
+import perfectionistNatural from "eslint-plugin-perfectionist/configs/recommended-natural";
 export default [
   eslintConfigPrettier,
   {
-    name:'js',
-    files:['*.js'],
-    rules:eslint.configs.recommended.rules
+    name: "js",
+    files: ["*.js"],
+    rules: eslint.configs.recommended.rules,
   },
   ...tseslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
-  eslintPluginUnicorn.configs['flat/recommended'],
+  eslintPluginUnicorn.configs["flat/recommended"],
   perfectionistNatural,
   {
     name: "astro",

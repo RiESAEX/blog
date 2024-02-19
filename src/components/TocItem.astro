@@ -1,7 +1,7 @@
 ---
 import type { HeadingItem } from "@/utils/toc";
-type Prop = { data: HeadingItem };
-const { id, depth, value, children } = Astro.props.data as HeadingItem;
+type Props = { data: HeadingItem };
+const { id, value, children } = Astro.props.data as HeadingItem;
 ---
 
 <li class="mt-0 pt-2 pl-2">

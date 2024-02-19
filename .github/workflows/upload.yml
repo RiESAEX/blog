@@ -1,0 +1,30 @@
+name: Upload dist
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: upload-dist-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup OSS
+        uses: ./.github/actions/setup-oss
+        with:
+          ossutil-config: ${{ secrets.OSSUTIL_CONFIG }}
+
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
+
+      - name: Build Dist
+        run: pnpm run build
+
+      - name: Upload to OSS
+        run: ossutil64 cp -f -r dist/ ${{ secrets.OSS_REMOTE_PATH }}

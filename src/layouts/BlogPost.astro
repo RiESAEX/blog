@@ -9,15 +9,8 @@ type Props = CollectionEntry<"blog">["data"] & {
   toc?: HeadingItem[];
 };
 
-const {
-  title,
-  description,
-  pubDate,
-  updatedDate,
-  heroImage,
-  minutesRead,
-  toc,
-} = Astro.props;
+const { title, description, pubDate, updatedDate, minutesRead, toc } =
+  Astro.props;
 ---
 
 <Base title={title} description={description}>

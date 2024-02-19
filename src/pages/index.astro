@@ -5,7 +5,7 @@ import BlogPost from "@/layouts/BlogPost.astro";
 
 const profile = await getEntry("blog", "about");
 
-const { Content, remarkPluginFrontmatter } = await profile.render();
+const { Content } = await profile.render();
 ---
 
 <BlogPost

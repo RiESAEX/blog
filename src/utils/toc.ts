@@ -60,6 +60,6 @@ function search(tree: Root) {
 export const Toc: RemarkPlugin = () => {
   return function (tree, { data }) {
     const result = search(tree);
-    data.astro.frontmatter.toc = result;
+    (data.astro as any).frontmatter.toc = result;
   };
 };
