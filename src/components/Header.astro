@@ -1,0 +1,40 @@
+---
+import HeaderLink from "./HeaderLink.astro";
+import { SITE_TITLE } from "../consts";
+import { Icon } from "astro-icon/components";
+import Button from "./Button.astro";
+import DarkMode from "./DarkMode.astro";
+---
+
+<header
+  class="sticky z-40 top-0 bg-background/80 backdrop-blur-lg border-b border-border"
+>
+  <div
+    class="container flex justify-between h-14 max-w-screen-2xl items-center"
+  >
+    <div class="mr-4 hidden md:flex">
+      <a href="/" class="mr-6 flex items-center space-x-2">
+        <span class="font-bold">{SITE_TITLE}</span>
+      </a>
+      <nav class="flex items-center space-x-6 text-sm font-medium">
+        <HeaderLink href="/blog">Blog</HeaderLink>
+      </nav>
+    </div>
+    <div class="flex items-center justify-end space-x-4">
+      <div class="flex items-center gap-x-1">
+        <Button
+          variant="ghost"
+          size="icon"
+          as="a"
+          href="https://github.com/RiESAEX"
+        >
+          <Icon name="mdi:github" class="w-[20px] h-5" />
+        </Button>
+        <DarkMode>
+          <Icon slot="light" name="mdi:weather-sunny" class="w-[20px] h-5" />
+          <Icon slot="dark" name="mdi:weather-night" class="w-[20px] h-5" />
+        </DarkMode>
+      </div>
+    </div>
+  </div>
+</header>

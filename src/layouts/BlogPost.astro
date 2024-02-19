@@ -1,0 +1,86 @@
+---
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "@/components/FormattedDate.astro";
+import Base from "./Base.astro";
+import type { HeadingItem } from "@/utils/toc";
+import Toc from "@/components/Toc.astro";
+type Props = CollectionEntry<"blog">["data"] & {
+  minutesRead?: string;
+  toc?: HeadingItem[];
+};
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  minutesRead,
+  toc,
+} = Astro.props;
+---
+
+<Base title={title} description={description}>
+  <>
+    <article class="mx-auto prose prose-cyan dark:prose-invert">
+      {pubDate && <FormattedDate date={pubDate} />}
+      {
+        updatedDate && (
+          <div class="last-updated-on">
+            Last updated on <FormattedDate date={updatedDate} />
+          </div>
+        )
+      }
+      {minutesRead ? ` · ${minutesRead}` : ""}
+      <h1>{title}</h1>
+      <div class="slide-enter-content"><slot /></div>
+    </article>
+  </>
+  <div
+    slot="toc"
+    class="sticky top-16 -mt-10 h-[calc(100vh-3.5rem)] overflow-hidden pt-6"
+  >
+    <Toc toc={toc} />
+  </div>
+</Base>
+<script>
+  const toc = [...document.getElementById("toc")!.getElementsByTagName("a")];
+
+  const ids = toc.map((v) => {
+    let id = v.href.split("#")[1];
+    return id;
+  });
+  function reset() {
+    toc.forEach((ele) => {
+      ele.classList.remove("!font-medium");
+      ele.classList.remove("!text-foreground");
+    });
+  }
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          console.log(e.target.id);
+          let cur = document.getElementById(`toc-${e.target.id}`);
+          reset();
+          console.log(cur);
+          cur?.classList.add("!font-medium");
+          cur?.classList.add("!text-foreground");
+        }
+      });
+    },
+    {
+      rootMargin: "-56px 0% -80% 0%",
+    },
+  );
+
+  console.log(ids);
+  ids.forEach((id) => {
+    const target = document.getElementById(id);
+    if (target) {
+      observer.observe(target);
+    } else {
+      console.warn("anchor not found", target);
+    }
+  });
+</script>

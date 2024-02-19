@@ -1,0 +1,72 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import BlogPost from "@/layouts/BlogPost.astro";
+import { Icon } from "astro-icon/components";
+import Button from "@/components/Button.astro";
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: post,
+  }));
+}
+type Props = CollectionEntry<"blog">;
+
+const post = Astro.props;
+const { Content, remarkPluginFrontmatter } = await post.render();
+---
+
+<BlogPost
+  {...post.data}
+  minutesRead={remarkPluginFrontmatter.minutesRead}
+  toc={remarkPluginFrontmatter.toc}
+>
+  <Content />
+</BlogPost>
+<Button
+  as="button"
+  variant="ghost"
+  size="sm"
+  id="copy-btn"
+  class="hidden absolute top-2 right-2"
+>
+  <Icon name="mdi:content-copy" class="w-4 h-4 copy" />
+  <Icon name="mdi:check" class="w-4 h-4 check hidden" />
+</Button>
+<script>
+  let baseBtn = document.getElementById("copy-btn")!;
+  let codeBlocks = Array.from(document.querySelectorAll("pre"));
+
+  for (let codeBlock of codeBlocks) {
+    let wrapper = document.createElement("div");
+    wrapper.style.position = "relative";
+
+    let copyButton = baseBtn.cloneNode(true) as HTMLButtonElement;
+    copyButton.setAttribute("tabindex", "0");
+    codeBlock.appendChild(copyButton);
+    copyButton.classList.remove("hidden");
+    // wrap codebock with relative parent element
+    codeBlock.parentNode?.insertBefore(wrapper, codeBlock);
+    wrapper.appendChild(codeBlock);
+
+    copyButton.addEventListener("click", async () => {
+      await copyCode(codeBlock, copyButton);
+    });
+  }
+
+  async function copyCode(block: HTMLPreElement, button: HTMLButtonElement) {
+    let code = block.querySelector("code");
+    let checkIcon = button.getElementsByClassName("check")[0];
+    let copyIcon = button.getElementsByClassName("copy")[0];
+    copyIcon.classList.add("hidden");
+    checkIcon.classList.remove("hidden");
+    let text = code?.innerText;
+
+    await navigator.clipboard.writeText(text!);
+
+    setTimeout(() => {
+      copyIcon.classList.remove("hidden");
+      checkIcon.classList.add("hidden");
+    }, 1000);
+  }
+</script>

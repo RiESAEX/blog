@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+type Props = {
+  title: string;
+  description: string;
+};
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-pt-14">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+
+  <body class="flex min-h-screen flex-col bg-background">
+    <Header />
+    <main class="flex-1 bg-background">
+      <div class="border-b">
+        <div
+          class="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"
+        >
+          <aside
+            class="fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 md:sticky md:block overflow-y-auto"
+          >
+          </aside>
+          <main
+            class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]"
+          >
+            <article class="mx-auto w-full min-w-0">
+              <slot />
+            </article>
+            <div class="hidden text-sm xl:block">
+              <slot name="toc" />
+            </div>
+          </main>
+        </div>
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,60 @@
+---
+import type { HeadingItem } from "@/utils/toc";
+import TocItem from "@/components/TocItem.astro";
+type Props = {
+  toc?: HeadingItem[];
+};
+
+const { toc } = Astro.props;
+---
+
+<div
+  slot="toc"
+  class="sticky top-16 -mt-10 h-[calc(100vh-3.5rem)] overflow-y-auto pt-6"
+>
+  <p class="font-medium pl-2">On This Page</p>
+  <ul class="m-0 list-none" id="toc">
+    {toc?.map((t) => <TocItem data={t} />)}
+  </ul>
+</div>
+<script>
+  const toc = [...document.getElementById("toc")!.getElementsByTagName("a")];
+
+  const ids = toc.map((v) => {
+    let id = v.href.split("#")[1];
+    return id;
+  });
+  function reset() {
+    toc.forEach((ele) => {
+      ele.classList.remove("!font-medium");
+      ele.classList.remove("!text-foreground");
+    });
+  }
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          console.log(e.target.id);
+          let cur = document.getElementById(`toc-${e.target.id}`);
+          reset();
+          console.log(cur);
+          cur?.classList.add("!font-medium");
+          cur?.classList.add("!text-foreground");
+        }
+      });
+    },
+    {
+      rootMargin: "-56px 0% -80% 0%",
+    },
+  );
+
+  console.log(ids);
+  ids.forEach((id) => {
+    const target = document.getElementById(id);
+    if (target) {
+      observer.observe(target);
+    } else {
+      console.warn("anchor not found", target);
+    }
+  });
+</script>

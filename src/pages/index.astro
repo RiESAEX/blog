@@ -1,0 +1,17 @@
+---
+import { getEntry } from "astro:content";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import BlogPost from "@/layouts/BlogPost.astro";
+
+const profile = await getEntry("blog", "about");
+
+const { Content, remarkPluginFrontmatter } = await profile.render();
+---
+
+<BlogPost
+  title={SITE_TITLE}
+  description={SITE_DESCRIPTION}
+  pubDate={profile.data.pubDate}
+>
+  <Content />
+</BlogPost>

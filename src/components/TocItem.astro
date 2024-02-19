@@ -1,0 +1,24 @@
+---
+import type { HeadingItem } from "@/utils/toc";
+type Prop = { data: HeadingItem };
+const { id, depth, value, children } = Astro.props.data as HeadingItem;
+---
+
+<li class="mt-0 pt-2 pl-2">
+  <a
+    href={`#${id}`}
+    id={`toc-${id}`}
+    class="inline-block no-underline transition-colors hover:text-foreground text-muted-foreground"
+  >
+    {value}
+  </a>
+  {
+    children && (
+      <ul class="m-0 list-none">
+        {children.map((v) => (
+          <Astro.self data={v} />
+        ))}
+      </ul>
+    )
+  }
+</li>
